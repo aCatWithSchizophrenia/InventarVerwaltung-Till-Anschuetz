@@ -1,0 +1,57 @@
+-- Tabelle Benutzer
+CREATE TABLE Benutzer (
+    BenutzerID INT PRIMARY KEY IDENTITY(1,1),
+    Benutzername VARCHAR(50) NOT NULL UNIQUE,
+    PasswortHash VARCHAR(255) NOT NULL,
+    Rolle VARCHAR(50) NOT NULL,
+    ErstelltAm DATETIME DEFAULT GETDATE()
+);
+
+-- Tabelle Standort
+CREATE TABLE Standort (
+    StandortID INT PRIMARY KEY IDENTITY(1,1),
+    Name VARCHAR(100) NOT NULL,
+    Beschreibung TEXT
+);
+
+-- Tabelle Kategorie
+CREATE TABLE Kategorie (
+    KategorieID INT PRIMARY KEY IDENTITY(1,1),
+    Name VARCHAR(100) NOT NULL,
+    Beschreibung TEXT
+);
+
+-- Tabelle Artikel
+CREATE TABLE Artikel (
+    ArtikelID INT PRIMARY KEY IDENTITY(1,1),
+    Bezeichnung VARCHAR(200) NOT NULL,
+    Beschreibung TEXT,
+    KategorieID INT,
+    StandortID INT,
+    Bestand INT DEFAULT 0,
+    Mindestbestand INT DEFAULT 0,
+    Seriennummer VARCHAR(100) UNIQUE,
+    ErstelltAm DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (KategorieID) REFERENCES Kategorie(KategorieID),
+    FOREIGN KEY (StandortID) REFERENCES Standort(StandortID)
+);
+
+-- Tabelle Inventarbewegung
+CREATE TABLE Inventarbewegung (
+    BewegungID INT PRIMARY KEY IDENTITY(1,1),
+    ArtikelID INT NOT NULL,
+    BenutzerID INT NOT NULL,
+    Typ VARCHAR(20) CHECK (Typ IN ('Eingang', 'Ausgang', 'Korrektur')) NOT NULL,
+    Menge INT NOT NULL,
+    Datum DATETIME DEFAULT GETDATE(),
+    Kommentar TEXT,
+    FOREIGN KEY (ArtikelID) REFERENCES Artikel(ArtikelID),
+    FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID)
+);
+
+-- Indexe für bessere Performance
+CREATE INDEX idx_artikel_kategorie ON Artikel(KategorieID);
+CREATE INDEX idx_artikel_standort ON Artikel(StandortID);
+CREATE INDEX idx_inventar_artikel ON Inventarbewegung(ArtikelID);
+CREATE INDEX idx_inventar_benutzer ON Inventarbewegung(BenutzerID);
+CREATE INDEX idx_inventar_datum ON Inventarbewegung(Datum);
