@@ -1,0 +1,13 @@
+    Konzeption & DB-Design: 6 Stunden
+
+    Kern-Entwicklung Backend : 6 Stunden
+
+    Logik & Inventarbewegung : 8 Stunden
+
+    Abschluss & Bugfixing: 4 Stunden
+
+    Erweiterung Standorte & Rollen: 16 Stunden
+
+    Fremd-Test & UI-Politur: 14 Stunden
+
+    Finalisierung & Abgabeunterlagen: 14 Stunden
